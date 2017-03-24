@@ -9,6 +9,8 @@
 #include "CSVReader.h"
 #include "time_stamp.h"
 
+#include "UwbParticleFilter.cuh"
+
 
 int main()
 {
@@ -66,6 +68,9 @@ int main()
 	double *d_beaconset;
 	cudaMalloc((void**)&d_raw, (beacon_num + 1)*(raw_num_times + 1) * sizeof(double));
 	cudaMalloc((void**)&d_beaconset, (beacon_num + 1)*(dimisional) * sizeof(double));
+	
+	cudaMemcpy(d_raw, h_raw, (beacon_num+1)*(raw_num_times+1)*sizeof(double),cudaMemcpyHostToDevice);
+	cudaMemcpy(d_beaconset, h_beaconset, (beacon_num + 1)*(dimisional) * sizeof(double), cudaMemcpyHostToDevice);
 
 
 	//PF
@@ -76,6 +81,7 @@ int main()
 	cudaMalloc((void**)&p_state, particle_num*dimisional * sizeof(double));
 	cudaMalloc((void **)&p_score, particle_num * 1 * sizeof(double));
 
+	//INITIAL
 
 
 	//Sample

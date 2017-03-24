@@ -15,5 +15,6 @@
     <ClInclude Include="MyError.h" />
     <ClInclude Include="time_stamp.h" />
     <ClInclude Include="Vector.h" />
+    <ClInclude Include="UwbParticleFilter.cuh" />
   </ItemGroup>
 </Project>

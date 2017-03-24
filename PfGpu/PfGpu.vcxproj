@@ -164,6 +164,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MyError.h" />
     <ClInclude Include="time_stamp.h" />
+    <ClInclude Include="UwbParticleFilter.cuh" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
