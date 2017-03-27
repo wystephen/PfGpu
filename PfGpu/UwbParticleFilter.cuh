@@ -36,4 +36,5 @@ __global__ void Sample(float* p_state,
 		p_state[index_x * 3] += rnd_x[index_x];
 		p_state[index_x * 3 + 1] += rnd_y[index_x];
 	}
+	//printf("inde x : %d,x:%f,y%f,/n",index_x,p_state[index_x*3],p_state[index_x*3+1]);
 }
