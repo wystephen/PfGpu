@@ -108,10 +108,7 @@ int main()
 
 
 	//Sample
-	curandGenerateNormal(gen, rnd_x, particle_num , 0.0, sample_sigma);
-	curandGenerateNormal(gen, rnd_y, particle_num , 0.0, sample_sigma);
-	Sample <<<ceil(particle_num / thread_dim_x), thread_dim_x >>> (p_state, rnd_x, rnd_y,
-		1, particle_num);
+	curandGenerateNormal(gen, rnd_x, particle_num , 0.0, sample_sigma); curandGenerateNormal(gen, rnd_y, particle_num , 0.0, sample_sigma); Sample <<<ceil(particle_num / thread_dim_x), thread_dim_x >>> (p_state, rnd_x, rnd_y, 1, particle_num);
 
 	//Evaluate
 	//COMMIT
