@@ -2,7 +2,9 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
-
+/**
+Initial Particle and score.
+*/
 __global__ void InitialParticle(float p_state[],
 	float p_score[],
 	float x,float y,float z,
@@ -23,6 +25,9 @@ __global__ void InitialParticle(float p_state[],
 
 }
 
+/*
+Sample according to rnd x and rnd y.
+*/
 __global__ void Sample(float* p_state,
 	float * rnd_x,
 	float * rnd_y,
@@ -37,4 +42,20 @@ __global__ void Sample(float* p_state,
 		p_state[index_x * 3 + 1] += rnd_y[index_x];
 	}
 	//printf("inde x : %d,x:%f,y%f,/n",index_x,p_state[index_x*3],p_state[index_x*3+1]);
+}
+
+__global__ void Evaluate(float * p_state,
+	float * p_score,
+	float * beacon_set,
+	int beacon_num,
+	float * raw_data,
+	float eval_sigma,
+	int particle_num)
+{
+	int index_x = blockDim.x * blockIdx.x + threadIdx.x;
+
+	if(index_x < particle_num)
+	{
+		
+	}
 }
