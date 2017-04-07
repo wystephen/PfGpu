@@ -56,6 +56,6 @@ __global__ void Evaluate(float * p_state,
 
 	if(index_x < particle_num)
 	{
-		
+		// for every particle 
 	}
 }
