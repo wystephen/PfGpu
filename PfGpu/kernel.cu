@@ -2,6 +2,8 @@
 #include "device_launch_parameters.h"
 #include <cuda.h>
 #include <curand.h>
+//#include <Trust/vector>
+
 
 #include <stdio.h>
 
@@ -135,7 +137,7 @@ int main()
 		float *d_res;
 
 		cudaMalloc((void **)&d_res, sizeof(float) * 2);
-		GetResult(p_state, p_score, particle_num, d_res);
+		GetResult << <ceil(particle_num / thread_dim_x), thread_dim_x >> >(p_state, p_score, particle_num, d_res);
 		cudaMemcpy(h_res, d_res, 3 * sizeof(float),cudaMemcpyDeviceToHost);
 
 
@@ -146,8 +148,9 @@ int main()
 		result_file << h_res[0] << "," << h_res[1] << std::endl;
 
 		//Resample
-		ReSample(p_state, p_score, particle_num);
-		Normalized(p_score, particle_num);
+		ReSample << <ceil(particle_num / thread_dim_x), thread_dim_x >> >(p_state, p_score, particle_num);
+		
+		Normalized << <ceil(particle_num / thread_dim_x), thread_dim_x >> >(p_score, particle_num);
 
 		//Compute error
 	}

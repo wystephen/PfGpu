@@ -1,6 +1,7 @@
 
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
+//#include "cu"
 
 /*
 Distance from x1,y1,z1,to x2,y2,z2;
@@ -64,6 +65,9 @@ __global__ void Sample(float* p_state,
 	//printf("inde x : %d,x:%f,y%f,/n",index_x,p_state[index_x*3],p_state[index_x*3+1]);
 }
 
+/*
+Evaluate each particle according to raw_data,without normalize.
+*/
 __global__ void Evaluate(float * p_state,
 	float * p_score,
 	float * beacon_set,
@@ -97,7 +101,16 @@ normalize p_score
 */
 __global__ void Normalized(float * p_score,int particle_num)
 {
-	
+	int index_x = blockDim.x * blockIdx.x + threadIdx.x;
+
+	// Sum 
+
+	// __ syncthreads
+	//__syncthreads();
+	//cudaDeviceSynchronize();
+
+
+	// normalize
 }
 
 /*
@@ -106,6 +119,9 @@ Get result
 __global__ void GetResult(float *p_state,float *p_score,int particle_num
 ,float * res)
 {
+	int index_x = blockDim.x * blockIdx.x + threadIdx.x;
+	// SUM
+
 	
 }
 
@@ -114,6 +130,7 @@ Resample
 */
 __global__ void ReSample(float *p_state,float *p_score,int particle_num)
 {
+	int index_x = blockDim.x * blockIdx.x + threadIdx.x;
 	// Resample
 
 	// syncthreads....
