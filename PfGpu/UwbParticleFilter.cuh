@@ -2,6 +2,26 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
+/*
+Distance from x1,y1,z1,to x2,y2,z2;
+*/
+
+__device__ float distance(float x1,float y1,float z1,
+	float x2,float y2,float z2)
+{
+	return sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2) + (z1 - z2)*(z1 - z2));
+}
+
+/**
+Norm pdf
+*/
+__device__ float norm_pdf(float x,float miu,float sigma)
+{
+	float para1 = 1 / (sqrt(2 * 3.1415926)*sigma);
+	float para2 = -(x - miu)*(x - miu) / 2 / sigma / sigma;
+	return para1 * exp(-para2);
+}
+
 /**
 Initial Particle and score.
 */
@@ -57,5 +77,48 @@ __global__ void Evaluate(float * p_state,
 	if(index_x < particle_num)
 	{
 		// for every particle 
+
+		float score(1.0);
+
+		// sum of all probability.
+		for(int i(0);i<beacon_num;++i)
+		{
+			score *= (norm_pdf(raw_data[i], 
+				distance(p_state[index_x],p_state[index_x+1],1.12,
+					beacon_set[i*3],beacon_set[i*3+1],beacon_set[i*3+2]), 
+				eval_sigma)+1e-20);
+		}
+		p_score[index_x] *= score;
 	}
 }
+
+/*
+normalize p_score
+*/
+__global__ void Normalized(float * p_score,int particle_num)
+{
+	
+}
+
+/*
+Get result
+*/
+__global__ void GetResult(float *p_state,float *p_score,int particle_num
+,float * res)
+{
+	
+}
+
+/*
+Resample
+*/
+__global__ void ReSample(float *p_state,float *p_score,int particle_num)
+{
+	// Resample
+
+	// syncthreads....
+
+	// write to p_state and p_score
+
+}
+

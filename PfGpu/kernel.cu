@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #include <iostream>
+#include <vector>
 
 #include "CSVReader.h"
 #include "time_stamp.h"
@@ -17,6 +18,10 @@
 
 int main()
 {
+	std::vector<double> res_x;
+	std::vector<double> res_y;
+	std::ofstream result_file("Result.csv");
+
 	//Load Data
 	CSVReader rawdatafile("C:\\Users\\steve\\Documents\\Visual\ Studio\ 2015\\Projects\\PfGpu\\Debug\\5UwbData.data.csv");
 
@@ -119,14 +124,34 @@ int main()
 			(d_raw+data_i*beacon_num), eval_sigma,
 			particle_num);
 
+		// Normalized
+
+		Normalized << <ceil(particle_num / thread_dim_x), thread_dim_x >> >
+			(p_score, particle_num);
+
 
 		//Get result
+		float *h_res = new float[2];
+		float *d_res;
 
+		cudaMalloc((void **)&d_res, sizeof(float) * 2);
+		GetResult(p_state, p_score, particle_num, d_res);
+		cudaMemcpy(h_res, d_res, 3 * sizeof(float),cudaMemcpyDeviceToHost);
+
+
+
+		//// Save result to csv file.
+		res_x.push_back(h_res[0]);
+		res_y.push_back(h_res[1]);
+		result_file << h_res[0] << "," << h_res[1] << std::endl;
 
 		//Resample
+		ReSample(p_state, p_score, particle_num);
+		Normalized(p_score, particle_num);
 
 		//Compute error
 	}
+	result_file.close();
 
 
 	//save output.
@@ -134,15 +159,15 @@ int main()
 	float* h_p_score = new float[particle_num];
 	cudaMemcpy(h_p_state, p_state, particle_num * dimisional * sizeof(float), cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_p_score, p_score, particle_num * sizeof(float), cudaMemcpyDeviceToHost);
-	for (int i(0); i < particle_num; ++i)
-	{
-		for (int j(0); j < dimisional; ++j)
-		{
-			std::cout << h_p_state[i * dimisional + j] << "-";
-		}
-		std::cout << std::endl;
-		std::cout << h_p_score[i] << "   =====" << std::endl;
-	}
+	//for (int i(0); i < particle_num; ++i)
+	//{
+	//	for (int j(0); j < dimisional; ++j)
+	//	{
+	//		std::cout << h_p_state[i * dimisional + j] << "-";
+	//	}
+	//	std::cout << std::endl;
+	//	std::cout << h_p_score[i] << "   =====" << std::endl;
+	//}
 
 	int a(0);
 	std::cin >> a;
