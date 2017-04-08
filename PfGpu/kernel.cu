@@ -153,6 +153,7 @@ int main()
 		Normalized << <ceil(particle_num / thread_dim_x), thread_dim_x >> >(p_score, particle_num);
 
 		//Compute error
+		
 	}
 	result_file.close();
 

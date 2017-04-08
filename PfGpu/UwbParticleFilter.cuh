@@ -104,7 +104,7 @@ __global__ void Normalized(float * p_score,int particle_num)
 	int index_x = blockDim.x * blockIdx.x + threadIdx.x;
 
 	// Sum 
-
+	
 	// __ syncthreads
 	//__syncthreads();
 	//cudaDeviceSynchronize();
@@ -121,6 +121,15 @@ __global__ void GetResult(float *p_state,float *p_score,int particle_num
 {
 	int index_x = blockDim.x * blockIdx.x + threadIdx.x;
 	// SUM
+	if(index_x<particle_num)
+	{
+		float tmp_score = p_score[index_x];
+		float tmp_x = p_state[index_x * 3];
+		float tmp_y = p_state[index_x * 3 + 1];
+		float tmp_z = p_state[index_x * 3 + 2];
+
+
+	}
 
 	
 }
