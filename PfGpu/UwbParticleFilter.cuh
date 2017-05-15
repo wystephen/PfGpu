@@ -1,6 +1,7 @@
 
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
+#include <cuda_runtime_api.h>
 //#include "cu"
 
 /*
@@ -99,11 +100,13 @@ __global__ void Evaluate(float * p_state,
 /*
 normalize p_score
 */
-__global__ void Normalized(float * p_score,int particle_num)
+__global__ void Normalized(float * p_score,
+	int particle_num)
 {
 	int index_x = blockDim.x * blockIdx.x + threadIdx.x;
 
 	// Sum 
+
 	
 	// __ syncthreads
 	//__syncthreads();
@@ -128,8 +131,8 @@ __global__ void GetResult(float *p_state,float *p_score,int particle_num
 		float tmp_y = p_state[index_x * 3 + 1];
 		float tmp_z = p_state[index_x * 3 + 2];
 
-
 	}
+
 
 	
 }
